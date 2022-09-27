@@ -1,10 +1,11 @@
 import { login } from '@/api/login'
-import { getUserInfo } from '@/api/user'
+import { getUserInfo, getUserDetaiById } from '@/api/user'
 export default {
   namespaced: true,
   state: {
     token: null,
-    userInfo: {}
+    userInfo: {},
+    hrsaasTime: 0
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -17,18 +18,32 @@ export default {
     // 删除用户信息
     RMOVE_USER_INFO(state) {
       state.userInfo = {}
+    },
+    REMOVE_TOKEN(state) {
+      state.token = null
+    },
+    SET_HRSAAS_TIME(state, hrsaasTime) {
+      state.hrsaasTime = hrsaasTime
     }
   },
   actions: {
     async loginAction({ commit }, loginData) {
       const data = await login(loginData)
       commit('SET_TOKEN', data)
+      commit('SET_HRSAAS_TIME', new Date().getTime())
     },
     async getUserInfo({ commit }) {
       // 接口请求
       const res = await getUserInfo()
-      commit('SET_USER_INFO', res)
-      return JSON.parse(JSON.stringify(res))
+      console.log(1)
+      const res1 = await getUserDetaiById(res.userId)
+      const result = { ...res, ...res1 }
+      commit('SET_USER_INFO', result)
+      return JSON.parse(JSON.stringify(result))
+    },
+    logout({ commit }) {
+      commit('RMOVE_USER_INFO')
+      commit('REMOVE_TOKEN')
     }
   }
 }

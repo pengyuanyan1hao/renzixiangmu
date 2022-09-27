@@ -1,19 +1,12 @@
 import request from '@/utils/request'
 
-export function login(data) {
-
-}
-
-export function getInfo(token) {
-
-}
-
-export function logout() {
-
-}
-export function getUserInfo() {
+export const getUserInfo = () => {
   return request({
     url: '/sys/profile',
-    method: 'post'
+    method: 'POST'
   })
 }
+export const getUserDetaiById = (id) => request({
+  url: `/sys/user/${id}`,
+  method: 'GET'
+})

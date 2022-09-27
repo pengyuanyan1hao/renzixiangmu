@@ -1,6 +1,15 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
+import router from '@/router'
+const TimeOut = 3600
+function isCheckTimeOut() {
+  const currentTime = Date.now()
+  console.log(currentTime)
+  const timeStamp = (currentTime - store.getters.hrsaasTime) / 1000
+  console.log(store.getters.hrsaasTime)
+  return timeStamp > TimeOut
+}
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   itmeout: 5000
@@ -8,6 +17,11 @@ const service = axios.create({
 
 service.interceptors.request.use(config => {
   if (store.getters.token) {
+    if (isCheckTimeOut()) {
+      store.dispatch('user/logout')
+      router.push('/login')
+      return Promise.reject(new Error('token 超时'))
+    }
     config.headers.Authorization = `Bearer ${store.getters.token}`
   }
   return config
@@ -25,8 +39,14 @@ service.interceptors.response.use(response => {
   // throw (new Error(message))
   return Promise.reject(new Error(message))
 }, error => {
-  Message.error(error.message)
-  return Promise.reject(error.message)
+  if (error.response && error.response.status === 401) {
+    store.dispatch('user/logout')
+    router.push('/login')
+    Message.erroe('token 超时')
+  } else {
+    Message.error(error.message)
+  }
+  return Promise.reject(error)
 })
 
 export default service
