@@ -35,7 +35,7 @@ export default {
     async getUserInfo({ commit }) {
       // 接口请求
       const res = await getUserInfo()
-      console.log(1)
+
       const res1 = await getUserDetaiById(res.userId)
       const result = { ...res, ...res1 }
       commit('SET_USER_INFO', result)

@@ -5,9 +5,9 @@ import router from '@/router'
 const TimeOut = 3600
 function isCheckTimeOut() {
   const currentTime = Date.now()
-  console.log(currentTime)
+
   const timeStamp = (currentTime - store.getters.hrsaasTime) / 1000
-  console.log(store.getters.hrsaasTime)
+
   return timeStamp > TimeOut
 }
 const service = axios.create({
