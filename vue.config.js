@@ -38,7 +38,8 @@ module.exports = {
     },
     proxy: {
       '/api': {
-        target: 'http://ihrm-java.itheima.net/', // 跨域请求的地址
+        // target: 'http://ihrm-java.itheima.net/', // 跨域请求的地址
+        target: 'http://ihrm.itheima.net/',
         changeOrigin: true // 只有这个值为true的情况下 才表示开启跨域
       }
     }

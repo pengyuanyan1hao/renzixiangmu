@@ -1,18 +1,23 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <Uploadimg @on-success="dianji" />
+
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
 export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
       'name'
     ])
+  },
+  methods: {
+    dianji(val) {
+      console.log('123', val)
+    }
   }
 }
 
